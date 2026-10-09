@@ -1,0 +1,25 @@
+{
+  "schema": "nh-public-db-sanitization/1",
+  "sales_rows": 97241,
+  "task_rows": 50324,
+  "all_sales_values_preserved_except_rehashed_evidence_reference": true,
+  "all_task_checkpoint_columns_exact": true,
+  "evidence_hashes_recomputed": 11312,
+  "evidence_original_body_hash_mismatches": 0,
+  "changed_columns": {
+    "attempts.capture_sha256": 11276,
+    "attempts.assessment_sha256": 4,
+    "sales.first_capture_sha256": 26725,
+    "row_sources.capture_sha256": 27117,
+    "events.details_json": 22621
+  },
+  "inherited_foreign_key_violations_by_table": {
+    "stage_events": 232,
+    "sales": 141030
+  },
+  "integrity_check": [
+    "ok"
+  ],
+  "database_sha256": "5c53996d0ed0b1de0a88e8035b6320d1d2c3dd8b3fafa150e377747535be0d21",
+  "source_database_sha256": "923c9a8e7319c80ac7844d88e58e80790f970bb790f5b38653cd0ef947949ae6"
+}

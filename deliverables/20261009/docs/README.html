@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>NH 微信销量采集说明</title><style>
+:root{color-scheme:light;--ink:#172333;--soft:#5b6677;--blue:#175cba;--line:#dce3eb}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:var(--ink);font:16px/1.8 'Segoe UI','Microsoft YaHei',Arial,sans-serif}
+.top{position:sticky;top:0;z-index:5;background:#ffffffed;border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.top-inner{max-width:1240px;margin:auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:700;font-size:18px}.brand small{display:block;font-size:12px;color:var(--soft);font-weight:400;letter-spacing:.02em}
+.language{display:flex;gap:4px;background:#edf1f7;padding:4px;border-radius:10px}button{font:inherit;cursor:pointer;border:0;padding:7px 16px;border-radius:7px;color:#354256;background:transparent}
+button[aria-pressed=true]{background:#fff;color:var(--blue);box-shadow:0 1px 5px #2334501c;font-weight:600}button:focus-visible,a:focus-visible{outline:3px solid #75a8ee;outline-offset:3px}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:34px;max-width:1240px;margin:30px auto;padding:0 28px}
+aside{position:sticky;top:100px;align-self:start;max-height:calc(100vh - 130px);overflow:auto;font-size:13px}aside strong{display:block;color:var(--soft);padding-bottom:8px}aside a{display:block;padding:5px 8px;border-left:2px solid var(--line);text-decoration:none;color:#4b5b72;line-height:1.5}aside a:hover{border-color:var(--blue);color:var(--blue)}
+main{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:30px 38px 38px}.actions{display:flex;gap:10px;flex-wrap:wrap;padding-bottom:19px;margin-bottom:24px;border-bottom:1px solid var(--line);font-size:13px}.actions a{background:#f0f5fc;border:1px solid #d3e2f5;padding:5px 10px;border-radius:6px;text-decoration:none}.help{font-size:13px;color:var(--soft);margin:0 0 16px}
+h1{font-size:29px;line-height:1.4;margin:5px 0 25px}h2{font-size:23px;margin:38px 0 13px;padding-top:8px;border-top:1px solid #edf1f5}h3{font-size:18px;margin:25px 0 10px}h1,h2,h3{scroll-margin-top:110px}p{margin:13px 0}a{color:var(--blue)}strong{font-weight:650}li{padding-left:3px;margin:5px 0}code{font:13px/1.6 Consolas,'Cascadia Code',monospace;background:#eef2f7;padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}pre{background:#f3f6fa;border:1px solid #e1e7ee;border-radius:8px;padding:16px;overflow:auto;line-height:1.55}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}
+.table-wrap{max-width:100%;overflow-x:auto;margin:18px 0}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;vertical-align:top;padding:11px 13px;border:1px solid var(--line)}th{background:#f0f4f9;font-weight:600}td:first-child{min-width:140px}.doc-content[hidden],nav[hidden]{display:none!important}footer{text-align:center;font-size:12px;color:var(--soft);padding:18px}
+@media(max-width:850px){.layout{grid-template-columns:1fr;gap:14px;margin:18px auto;padding:0 14px}aside{position:static;max-height:none}aside nav{display:grid;grid-template-columns:1fr 1fr;gap:4px}main{padding:20px}h1{font-size:25px}.top-inner{padding:11px 14px}.brand{font-size:16px}button{padding:6px 11px}}
+@media print{.top,aside,.actions,.help,footer{display:none}.layout{display:block;margin:0;padding:0}main{border:0;padding:0}body{background:#fff}pre{white-space:pre-wrap}h2{break-after:avoid}.doc-content[hidden]{display:none!important}}
+</style></head>
+<body data-language="zh-CN" data-title-zh="NH 微信销量采集说明" data-title-en="NH Vehicle Sales Collector Guide">
+<header class="top"><div class="top-inner"><div class="brand"><span data-ui-zh="NH 微信销量采集说明" data-ui-en="NH Vehicle Sales Collector Guide">NH 微信销量采集说明</span><small data-ui-zh="离线说明 · 2026-10-09" data-ui-en="Offline guide · 2026-10-09">离线说明 · 2026-10-09</small></div>
+<div class="language" role="group" aria-label="Language"><button type="button" id="language-zh" data-language="zh-CN" aria-pressed="true" lang="zh-Hans">简体中文</button><button type="button" id="language-en" data-language="en" aria-pressed="false" lang="en">English</button></div></div></header>
+<div class="layout"><aside><strong data-ui-zh="目录" data-ui-en="Contents">目录</strong><nav data-panel="zh-CN"><a href="#zh-section-2">1. 建议在专用虚拟机中运行</a><a href="#zh-section-4">2. 第一次安装</a><a href="#zh-section-5">3. 选择采集模式</a><a href="#zh-section-9">4. 休息设置</a><a href="#zh-section-10">5. 数据和断点</a><a href="#zh-section-11">6. 查看进度、停止和恢复</a><a href="#zh-section-13">7. 备份和迁移</a><a href="#zh-section-14">8. 手机版资料</a><a href="#zh-section-15">9. 平台、网络和查询记录</a><a href="#zh-section-16">10. 文件与验证记录</a></nav><nav data-panel="en" hidden><a href="#en-section-2">1. Use a dedicated virtual machine</a><a href="#en-section-4">2. First-time installation</a><a href="#en-section-5">3. Choose a collection mode</a><a href="#en-section-9">4. Scheduled breaks</a><a href="#en-section-10">5. Data and checkpoints</a><a href="#en-section-11">6. Progress, stopping, and resuming</a><a href="#en-section-13">7. Backup and migration</a><a href="#en-section-14">8. Phone-project files</a><a href="#en-section-15">9. Platform, networking, and query records</a><a href="#en-section-16">10. Files and verification records</a></nav></aside>
+<main><p class="help" data-ui-zh="点击右上角切换语言。此页面可离线阅读，不会启动程序或代理。" data-ui-en="Choose a language at the top right. This guide works offline and does not start a collector or proxy.">点击右上角切换语言。此页面可离线阅读，不会启动程序或代理。</p>
+<div class="actions"><a download data-href-zh="README_CN.md" data-href-en="README_EN.md" data-ui-zh="下载中文 Markdown" data-ui-en="Download English Markdown">下载中文 Markdown</a></div>
+<section id="doc-zh" class="doc-content" data-panel="zh-CN" lang="zh-Hans"><h1 id="zh-section-1">NH 微信销量采集使用说明</h1>
+<p>采集代码版本：NH-Unified-20261006-R1。说明修订：2026-10-06。</p>
+<p>本包包含电脑版三种采集入口、Python 和 OCR 环境、已保存的销量数据库、任务断点，以及手机版代码和截图资料。先完整解压，再运行 CMD；不要直接在压缩软件里双击。</p>
+<h2 id="zh-section-2">1. 建议在专用虚拟机中运行</h2>
+<p><strong>纯 GUI 采集会控制鼠标、滚动页面，并把小程序保持在前台。采集期间，这台电脑不适合同时用来办公、聊天或操作其他窗口。</strong> 鼠标被移动、页面被切走或窗口被遮挡，都可能让采集暂停。</p>
+<p>建议给采集器单独准备一台 Windows 虚拟机：在虚拟机里运行微信和采集器，宿主机继续正常使用。也可以用一台闲置电脑。</p>
+<p>虚拟机内需要保持微信登录，桌面不能锁屏、休眠或黑屏断开。使用虚拟机控制台，运行后不要在虚拟机里抢鼠标或切换页面。宿主机也不要进入休眠。混合模式会切换到 GUI，按同样要求准备；纯 API 的认证恢复也可能操作微信窗口。</p>
+<h3 id="zh-section-3">当前分辨率要求</h3>
+<p>当前 GUI 校准环境是 <strong>1600×1200、单显示器、Windows 缩放100%</strong>，小程序窗口固定为 <strong>575×1154</strong>，标题为 <code>NH乘用车销量库</code>。</p>
+<div class="table-wrap"><table><thead><tr><th>屏幕设置</th><th>当前情况</th></tr></thead><tbody>
+<tr><td>1600×1200，100%缩放</td><td>本包现用的校准设置。建议虚拟机直接采用这一档。</td></tr>
+<tr><td>1920×1080（16:9，1080p）</td><td>尚未适配。原窗口高1154像素，放不进1080像素的屏幕；需要缩短窗口，重新测量底部按钮、滚动和截图范围。</td></tr>
+<tr><td>2560×1440（16:9，通常称2K）</td><td>尚未验收。原窗口尺寸可以容纳，但显示检查和微信恢复窗口仍有1600×1200限制，需要调整并测试。</td></tr>
+<tr><td>125%、150%缩放或多显示器</td><td>需要单独校准，不能套用100%缩放的坐标。</td></tr>
+</tbody></table></div>
+<p>代码已有窗口相对坐标和控件定位，可以在测量后增加1080p、2K配置。只放宽分辨率检查不够，还要检查日期、城市、车型、返回和确认按钮，以及截图和 OCR。初步校准可只操作选择页和复核已有截图，不点击“查询”。本次只更新说明，仍使用原分辨率配置。</p>
+<h2 id="zh-section-4">2. 第一次安装</h2>
+<ol>
+<li>解压完整 ZIP，例如放到 <code>D:\NH-Unified-20261006</code>。</li>
+<li>双击 <strong>00-Set-Root.cmd</strong>，选择 <code>C:\NH-Crawler</code>、<code>D:\NH-Crawler</code>、<code>E:\NH-Crawler</code> 或其他绝对目录。默认是 <code>C:\NH-Crawler</code>。</li>
+<li>双击 <strong>01-Install.cmd</strong>。安装器校验文件后，把代码、Python、数据库和证据复制到选定目录，并调整运行路径。目标目录必须为空，不使用目录联接。</li>
+<li>双击 <strong>02-Check-Install-Environment.cmd</strong>。缺少 VC++ x64 时会从微软下载，验证签名后请求管理员权限安装；如提示重启，先重启 Windows。</li>
+<li>在微信中打开 <code>NH乘用车销量库</code>，按上面的分辨率要求设置，再选择启动模式。</li>
+</ol>
+<p>Python 3.12、OCR、OpenCV、ONNX Runtime 和窗口操作依赖已经随包提供。VC++ 安装器需要联网下载，不是离线内置。其他依赖损坏时，环境检查会列出失败项，不自动更换库版本。<strong>03-Repair-VCpp.cmd</strong> 用于重新安装或修复 VC++。</p>
+<p>安装后的入口在 <code>&lt;根目录&gt;\UNIFIED\</code>，以后从这里启动即可。若目标目录已有数据，先备份并选择新的空目录；安装中断留下的半成品目录也应另行处理。</p>
+<p>也可以从解压目录执行：</p>
+<pre><code data-syntax="powershell">powershell -NoProfile -ExecutionPolicy Bypass -File .\Unified.ps1 -Action install -Root &#x27;E:\NH-Crawler&#x27;</code></pre>
+<p>这条命令只安装，不启动采集。历史证据里的旧盘符保留原样，查看原图时按 evidence 相对路径到新目录寻找。</p>
+<h2 id="zh-section-5">3. 选择采集模式</h2>
+<h3 id="zh-section-6">10-Start-Pure-GUI.cmd：纯 GUI</h3>
+<p>通过小程序界面模拟点击、读取窗口、截图，再在电脑上 OCR 并写入原队列和数据库。截图来自目标窗口，不是下载销量图片。这个入口不启动 API 销量采集器。</p>
+<p>保留原有模拟输入参数、窗口锁、守护和遮挡恢复。每次查询收尾随机等待10–20秒。OCR失败时先复核已有截图；本地读取 API 断点文件不等于发送 API 请求。</p>
+<h3 id="zh-section-7">11-Start-GUI-API.cmd：API 与 GUI 接续</h3>
+<p>先运行 API。认证恢复尝试耗尽且满足交接条件后，API退出，再启动 GUI。GUI运行期间只读本地 token 候选；发现候选后先停 GUI，再交给 API 请求验证。</p>
+<p>两种方式顺序运行，不并发。它们使用同一电脑数据库和输出目录。新合包的完整接续流程还需要实际微信环境验收；现有等待、HOLD或认证失败会保留，并在状态和日志中显示。</p>
+<h3 id="zh-section-8">12-Start-Pure-API.cmd：纯 API</h3>
+<p>只运行 API 销量采集器，认证失败后不切换到 GUI 销量采集。保留自动寻找本地 token 候选，以及微信 H5 刷新、重开的认证恢复流程。</p>
+<p>健康请求随机等待12–20秒；异常退避可延长至120秒，长冷却另行保存。首次没有初始化等待状态时，原 B05 逻辑可能先等100分钟。重启保留剩余等待。</p>
+<p>默认查询窗口为24个月：全国结果不足35行时，一次可以包含多个城市和月份；达到35行后拆省，再拆城市；城市仍达到35行则二分月份。单城单月仍达到上限时，记录为 <code>UNFINISHED</code>。</p>
+<p>当前 API 不采用35个月窗口。35是返回行数上限，不能直接当作35个月；任务结束按范围完整性判断，不按是否出现2026年判断。原车型名到 API ID 的映射保留，同名车型的厂商归属需要结合目录核对。</p>
+<p>同一项目已有采集进程时，再点启动只显示状态。发现其他目录的采集器，或无法确认进程身份时，启动会停止。换模式前先使用停止入口，避免同时启动多个采集器。</p>
+<h2 id="zh-section-9">4. 休息设置</h2>
+<p>GUI默认按累计实际采集运行时间计算：</p>
+<ul>
+<li>每运行1小时，随机休息10–20分钟。</li>
+<li>累计运行4小时，随机休息45–101分钟，优先执行长休息，不再叠加短休息。</li>
+<li>休息时间不计入累计运行时间。</li>
+</ul>
+<div class="table-wrap"><table><thead><tr><th>入口</th><th>用途</th></tr></thead><tbody>
+<tr><td><strong>30-Long-Rest-OFF.cmd</strong></td><td>关闭后续4小时计划长休息</td></tr>
+<tr><td><strong>31-Long-Rest-ON.cmd</strong></td><td>恢复4小时计划长休息</td></tr>
+<tr><td><strong>32-Short-Rest-OFF.cmd</strong></td><td>关闭后续每小时计划短休息</td></tr>
+<tr><td><strong>33-Short-Rest-ON.cmd</strong></td><td>恢复每小时计划短休息</td></tr>
+</tbody></table></div>
+<p>设置保存在 <code>&lt;根目录&gt;\GUI-ONLY\duty-cycle.json</code> 的 <code>scheduled_long_rest_enabled</code>、<code>scheduled_short_rest_enabled</code>，下一轮运行读取，不需要反复重启。正在进行的休息不会因关闭开关提前结束；重新开启也不清零累计时间。</p>
+<p>当前配置没有“每40分钟自动冷却”这一项，旧资料中的40分钟可能指监控频率。</p>
+<p>这些开关只控制计划休息。每次查询等待、API退避、服务端指定等待、权限或额度不足、STOP/HOLD仍按原逻辑处理。不要用旧版 <code>GUI-DUTY-OFF</code> 替代这两个开关。</p>
+<h2 id="zh-section-10">5. 数据和断点</h2>
+<p>主数据库：</p>
+<pre><code data-syntax="text">&lt;根目录&gt;\nh-sales-v3\output\adaptive.sqlite3</code></pre>
+<div class="table-wrap"><table><thead><tr><th>表或目录</th><th>内容</th></tr></thead><tbody>
+<tr><td><code>sales</code></td><td>已采集销量，包含厂商、品牌、车型、类别、年月、城市/省份等原字段</td></tr>
+<tr><td><code>tasks</code></td><td>查询范围、父子任务、状态、完成类型和分片跳过记录，含已确认空结果</td></tr>
+<tr><td><code>attempts</code></td><td>尝试、租约和提交记录，用来处理中断后是否可以重查</td></tr>
+<tr><td><code>evidence</code>、<code>row_sources</code></td><td>截图证据索引和数据来源</td></tr>
+<tr><td><code>output\v3\</code></td><td>运行状态、心跳和停止原因</td></tr>
+<tr><td><code>output\evidence2\</code></td><td>截图证据</td></tr>
+<tr><td><code>GUI-ONLY\dutycycle\</code>、kit的<code>runtime\</code></td><td>休息、HOLD、门禁和互斥状态</td></tr>
+<tr><td><code>output\api-collect\done.txt</code></td><td>当前 API 运行生成的完成断点，同目录还有范围、未完成任务和认证日志</td></tr>
+</tbody></table></div>
+<p>本包数据库快照有 <strong>97,241条销量、50,324条任务、12,238条尝试记录</strong>。其中2,576个 <code>verified_empty_scope*</code> 任务记录已确认空范围，销量表不补零。这是本机保存的快照，不是所有虚拟机截至今天的汇总。</p>
+<p>分片为 <strong>P1 / [0,504]</strong>，顺序 <code>p1_cut_forward_circular_p2_p3_p4_p5</code>。原 GUI 时间范围和排除2026的配置保留。<code>partition_skipped</code> 表示由其他分片负责，不是本机漏采。</p>
+<p>API旧断点在 <code>snapshots\api-unbound\</code> 和 <code>archives\API-checkpoints-unbound.zip</code>，尚未绑定当前机器，因此没有自动启用。导入前要核对机器、车型/厂商、月份、城市范围及数据库；不同分片的 <code>done.txt</code> 不要直接合并。</p>
+<p>数据库物理完整性检查正常，历史外键问题仍保留。旧版本可能存在误空、误停或未完成记录，合包本身没有清洗这些断点。</p>
+<p>全库 SQL 位于 <code>sql\adaptive-full.sql.gz</code>，包含所有表。<code>DATA-SNAPSHOT.json</code>记录计数和哈希；<code>SOURCES.json</code>、<code>SUPPLEMENTS.json</code>、<code>EXTRA-HISTORICAL-FILES.json</code>记录资料来源。缺失的历史截图和目录资料来自旧迁移包，未覆盖较新的数据库或状态。</p>
+<h2 id="zh-section-11">6. 查看进度、停止和恢复</h2>
+<ul>
+<li><strong>20-Status.cmd</strong>：查看数据库计数、停止和等待状态。判断进展时看最近查询、销量新增和任务变化，不只看进程或心跳。</li>
+<li><strong>21-Stop-This-Project.cmd</strong>：停止本项目，保留数据、断点和剩余等待；其他目录的采集器不受影响。</li>
+<li><strong>22-Resume-Manual-Stop-Only.cmd</strong>：人工确认后输入 <code>RESUME</code>，解除由本包手动停止入口写入的标记，再另选模式启动。平台HOLD和其他等待不会一并清除。</li>
+</ul>
+<p>日志位置：</p>
+<pre><code data-syntax="text">API日志：&lt;根目录&gt;\nh-sales-v3\output\api-collect\run-*.log
+API探针：同目录 probe-events-*.jsonl、probe-state.json
+GUI日志：kit\logs\、GUI-ONLY\logs\、GUI-ONLY\dutycycle\、output\v3\</code></pre>
+<p>探针记录已有请求的上下文，不额外发送测试请求。看最新日志的时间，旧日志里的车型或城市不代表当前任务。</p>
+<h3 id="zh-section-12">常见问题</h3>
+<div class="table-wrap"><table><thead><tr><th>情况</th><th>先检查什么</th></tr></thead><tbody>
+<tr><td>找不到窗口或控件</td><td>分辨率、缩放、精确标题、前台是否为正确小程序，有无窗口遮挡</td></tr>
+<tr><td><code>interactive_desktop_unavailable</code></td><td>虚拟机或电脑是否锁屏、休眠，交互桌面是否断开</td></tr>
+<tr><td>OCR失败或表格不完整</td><td>先复核已有截图和当前范围，避免重复提交同一查询</td></tr>
+<tr><td>token找不到或401</td><td>微信是否登录，是否打开正确H5会话；链接中的临时code不是永久token，刷新后的有效性仍由接口响应确认</td></tr>
+<tr><td><code>SAVED</code>后等待较长</td><td>日志里的异常退避、保留等待、服务端等待或长冷却</td></tr>
+<tr><td>“查询次数已用完”“无权使用”</td><td>先手工确认账户权限和额度，再处理停止原因</td></tr>
+<tr><td>evidence损坏</td><td>新证据写入evidence2；检查磁盘状况，换文件夹不能修复磁盘本身</td></tr>
+</tbody></table></div>
+<h2 id="zh-section-13">7. 备份和迁移</h2>
+<p>先停止采集，再备份：</p>
+<ul>
+<li>完整 <code>nh-sales-v3\output</code>，包括数据库、catalogs、evidence2、adaptive-attempts、v3和api-collect。</li>
+<li>kit的 <code>runtime</code>。</li>
+<li>GUI的 <code>dutycycle</code>。</li>
+<li>当前代码和配置。</li>
+</ul>
+<p>SQLite正在写入时，可能还有 <code>-wal</code>、<code>-shm</code> 文件，不要只复制主数据库。本包使用核验后的静态快照。当前虚拟机若已有更新数据，先导出其最新文件，不能用本包快照覆盖。</p>
+<p>迁移时停止旧机器，在新机器的空目录安装，再接续同一分片。不要复制同一P1断点后让两台同时跑重叠任务。</p>
+<p>SQL用于恢复到新的空数据库或核对数据：解压 <code>adaptive-full.sql.gz</code>，导入后检查全部表计数和完整性。日常使用直接保留 <code>adaptive.sqlite3</code> 即可。SQL恢复结果在 <code>SQL-RESTORE-VERIFICATION.json</code>。</p>
+<h2 id="zh-section-14">8. 手机版资料</h2>
+<pre><code data-syntax="text">archives\NH-Honor-P1P2-D-20261001-Code-Patch.zip
+archives\NH-Honor-Click-Screenshot-Evidence-20261002.zip
+phone\latest-stopped-runtime\
+phone\CONTINUITY.json
+phone\PROGRESS.json</code></pre>
+<p>手机方案采用手机原生截图、USB传回电脑、电脑OCR，保留35个月方案和执行账本。最新批量尝试因缺少日期文字回执退出，自动批量采集尚未验收。状态为 <code>USER_STOPPED</code>，两个旧监控暂停。</p>
+<p>曾有毕节/问界M9单次查询的15条审核结果，保存在手机独立 <code>auto_sales</code> 表，未合并到电脑主库。<code>40-Phone-Package-Status.cmd</code>只查看资料状态，不启动手机采集。</p>
+<p>截图包保留原生截图和程序输入回执，可用于核对操作过程。模拟触摸属于程序操作，菜单截图不计为新销量查询。</p>
+<h2 id="zh-section-15">9. 平台、网络和查询记录</h2>
+<p>平台是“乘用车销量/NH乘用车销量库”小程序及相关微信H5，保存的API代码使用maibasi.com业务接口。</p>
+<p>你提供的购买规则包括会员手工查询和截图分享。接口及批量自动查询的额度，以平台给出的具体说明为准，购买说明和客服回复可以一起留档。</p>
+<p>历史问题包括401、空HTTP响应、页面权限或查询次数提示、网络错误，也包括窗口定位、token恢复和OCR问题。排查时对照同一时间的日志、页面提示和账户状态；不能只凭响应慢就判断是反爬或服务器性能问题。</p>
+<p>后台截图里的“3毫秒/4毫秒”是<strong>消耗时间</strong>，不是请求间隔。频率看同一账户的操作日期，或探针里的 <code>start_interval_seconds</code>。</p>
+<p>虚拟机私网IP不同，公网出口可能仍与宿主机相同，NAT通常共用出口。更换昵称也不等于更换会员或会话标识。需要迁移网络或排障时，先停止采集、保留断点，再确认微信登录和实际出口；本包不自动切换IP或账号。</p>
+<p><code>HTTP_PROXY</code>、<code>HTTPS_PROXY</code>环境变量不能作为微信小程序已经走代理的判断依据。手机USB调试用于控制和传图，业务流量走哪条网络，要看手机实际路由和代理设置。</p>
+<p>随机等待和退避用于控制频率、减少重复请求，没有固定的“不封号间隔”。遇到明确权限、额度或限流提示，按日志停止或等待；token有效期和多个token能否同时使用，目前没有固定规律结论。</p>
+<p>相关资料：<a href="https://docs.scrapy.org/en/latest/topics/autothrottle.html" rel="noopener noreferrer">Scrapy节流说明</a>、<a href="https://developer.android.com/tools/adb" rel="noopener noreferrer">Android ADB文档</a>。</p>
+<h2 id="zh-section-16">10. 文件与验证记录</h2>
+<pre><code data-syntax="text">00-Set-Root.cmd                  选择安装目录
+01-Install.cmd                   安装到空目录
+02-Check-Install-Environment.cmd  环境检查，缺VC++时下载并安装
+03-Repair-VCpp.cmd                修复VC++
+10-Start-Pure-GUI.cmd             纯GUI
+11-Start-GUI-API.cmd              API优先，GUI顺序接续
+12-Start-Pure-API.cmd             纯API
+20-Status.cmd                    查看状态
+21-Stop-This-Project.cmd          停止本项目
+22-Resume-Manual-Stop-Only.cmd     解除本包手动停止标记
+30/31-Long-Rest-OFF/ON.cmd        长休息开关
+32/33-Short-Rest-OFF/ON.cmd       短休息开关
+40-Phone-Package-Status.cmd       查看手机版状态
+90/91/92-Offline-Plan-*.cmd       离线查看三种模式计划
+payload/                        代码、Python、电脑数据库和证据
+sql/                            完整SQL
+phone/                          手机版停止时资料
+archives/                       发布包与证据归档
+snapshots/api-unbound/           尚未绑定机器的API旧断点</code></pre>
+<p>整合包完成了离线入口、目录适配、依赖和原有测试，以及SQL恢复和数据/证据哈希核对；没有重新进行实际微信采集验收。运行前按环境检查结果准备。</p>
+<p><code>VERIFICATION.txt</code>保存测试和哈希，<code>ROLES.json</code>记录原交付及后续补充文件。回滚脚本只恢复指定的包副本，不修改正式数据库或已安装目录。</p>
+<p>完整版含数据库、截图及诊断，可能带有账户、会员、IP等信息。用于私人备份和迁移，分享给别人前先检查内容。</p></section>
+<section id="doc-en" class="doc-content" data-panel="en" lang="en" hidden><h1 id="en-section-1">NH WeChat Vehicle Sales Collector — User Guide</h1>
+<p>Collector code version: NH-Unified-20261006-R1. Source guide revised: 2026-10-06. English edition: 2026-10-09.</p>
+<p>The package includes three desktop collection modes, Python and OCR dependencies, the saved sales database and task checkpoints, and the phone project&#x27;s code and screenshot records. Extract the entire ZIP before running a CMD file; do not run it from inside an archive viewer.</p>
+<h2 id="en-section-2">1. Use a dedicated virtual machine</h2>
+<p><strong>Pure GUI collection controls the mouse, scrolls the page, and keeps the mini program in the foreground. While it runs, this computer is not suitable for office work, chatting, or operating other windows at the same time.</strong> Moving the mouse, switching pages, or covering the window can pause collection.</p>
+<p>A dedicated Windows virtual machine is recommended: run WeChat and the collector inside the VM, and use the host computer normally. A spare physical computer is another option.</p>
+<p>Keep WeChat signed in and the VM&#x27;s interactive desktop available. Do not lock it, put it to sleep, or disconnect its interactive desktop. Use the VM console and avoid taking over the mouse or switching pages inside the VM while collection runs. Keep the host awake as well. Combined mode can switch to GUI and needs the same setup; authentication recovery in pure API mode can also operate a WeChat window.</p>
+<h3 id="en-section-3">Current display requirements</h3>
+<p>The current GUI calibration uses <strong>1600×1200, one display, and 100% Windows scaling</strong>. The mini-program window is fixed at <strong>575×1154</strong>, with the exact title <code>NH乘用车销量库</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Display setting</th><th>Current status</th></tr></thead><tbody>
+<tr><td>1600×1200 at 100% scaling</td><td>The calibration used by this package. Use this setting in the VM where possible.</td></tr>
+<tr><td>1920×1080 (16:9, 1080p)</td><td>Not adapted yet. The original 1154-pixel-high window does not fit a 1080-pixel-high display. The window must be shortened and the footer buttons, scrolling, and screenshot area recalibrated.</td></tr>
+<tr><td>2560×1440 (16:9, commonly called 2K)</td><td>Not accepted through testing yet. The original window can fit, but display checks and WeChat recovery still contain 1600×1200 restrictions and need adjustment and testing.</td></tr>
+<tr><td>125% or 150% scaling, or multiple displays</td><td>Requires separate calibration. Coordinates calibrated at 100% scaling cannot simply be reused.</td></tr>
+</tbody></table></div>
+<p>The code already uses window-relative coordinates and control detection, so 1080p and 2K profiles can be added after measurement. Relaxing the display check alone is insufficient: date, city, model, Back and Confirm controls, screenshots, and OCR also need checking. Initial calibration can use selection pages and existing screenshots without pressing Query. This revision changes documentation only; the original display configuration remains in place.</p>
+<h2 id="en-section-4">2. First-time installation</h2>
+<ol>
+<li>Extract the full ZIP, for example to <code>D:\NH-Unified-20261006</code>.</li>
+<li>Double-click <strong>00-Set-Root.cmd</strong> and choose <code>C:\NH-Crawler</code>, <code>D:\NH-Crawler</code>, <code>E:\NH-Crawler</code>, or another absolute directory. The default is <code>C:\NH-Crawler</code>.</li>
+<li>Double-click <strong>01-Install.cmd</strong>. After checking the files, the installer copies the code, Python, database, and evidence to that directory and adjusts runtime paths. The destination must be empty; no directory junction is used.</li>
+<li>Double-click <strong>02-Check-Install-Environment.cmd</strong>. If the x64 Visual C++ runtime is missing, it downloads the Microsoft installer, verifies its signature, and requests administrator approval. Restart Windows first if the installer requests a restart.</li>
+<li>Open <code>NH乘用车销量库</code> in WeChat, use the display settings above, and choose a collection mode.</li>
+</ol>
+<p>Python 3.12, OCR, OpenCV, ONNX Runtime, and window-control dependencies are bundled. The Visual C++ installer is downloaded online; it is not included as an offline installer. If other dependencies are damaged, the environment check lists the failed items instead of automatically replacing library versions. <strong>03-Repair-VCpp.cmd</strong> reinstalls or repairs the Visual C++ runtime.</p>
+<p>Installed launchers are under <code>&lt;root&gt;\UNIFIED\</code>; use those for subsequent runs. If the destination already contains data, back it up and choose a new empty directory. A partly installed directory left by an interrupted installation also needs separate attention.</p>
+<p>You can also run this from the extracted directory:</p>
+<pre><code data-syntax="powershell">powershell -NoProfile -ExecutionPolicy Bypass -File .\Unified.ps1 -Action install -Root &#x27;E:\NH-Crawler&#x27;</code></pre>
+<p>This installs the package without starting collection. Old drive letters in historical evidence are retained; locate the original image under the new root using the same evidence-relative path.</p>
+<h2 id="en-section-5">3. Choose a collection mode</h2>
+<h3 id="en-section-6">10-Start-Pure-GUI.cmd: pure GUI</h3>
+<p>Uses simulated clicks in the mini program, reads its window, takes screenshots, and runs OCR on the computer before writing to the existing queue and database. Screenshots come from the target window, not downloaded sales images. This launcher does not start the API sales collector.</p>
+<p>The existing input settings, window lock, supervisor, and obstruction recovery are retained. Each query&#x27;s finishing stage includes a random 10–20-second wait. Review existing screenshots first if OCR fails. Reading an API checkpoint file locally is not an API request.</p>
+<h3 id="en-section-7">11-Start-GUI-API.cmd: API with GUI handoff</h3>
+<p>Runs API collection first. When authentication recovery attempts are exhausted and the handoff conditions are satisfied, API collection exits before GUI starts. While GUI runs, the adapter only reads local token candidates. When a candidate appears, it stops GUI first and then lets an API request validate the candidate.</p>
+<p>The two modes run sequentially, not concurrently, and use the same desktop database and output directory. The complete handoff in this newly integrated package still needs acceptance testing in a real WeChat environment. Existing waits, HOLD states, and authentication failures are retained and shown in status and logs.</p>
+<h3 id="en-section-8">12-Start-Pure-API.cmd: pure API</h3>
+<p>Runs only the API sales collector and does not fall back to GUI sales collection after authentication failure. Local token discovery and WeChat H5 refresh/reopen authentication recovery are retained.</p>
+<p>Healthy requests wait a random 12–20 seconds. Abnormal backoff may extend to 120 seconds; long cooldowns are stored separately. If pacing state has not been initialized, the original B05 logic may wait 100 minutes first. Restarting preserves the remaining wait.</p>
+<p>The default query window is 24 months. When a national response contains fewer than 35 rows, one response can include several cities and months. At 35 rows, it splits by province and then city. A city response still reaching 35 rows is split by month. If a single-city, single-month query still reaches the limit, it is recorded as <code>UNFINISHED</code>.</p>
+<p>The current API mode does not use 35-month windows. The number 35 is a response-row cap, not a month count. Completion depends on coverage, not on whether a row dated 2026 appears. The original model-name-to-API-ID mapping is retained; manufacturer attribution for identically named models needs checking against the catalog.</p>
+<p>If this project already has a collection process, clicking Start again shows its status. Startup stops if a collector in another directory is found or process identity cannot be confirmed. Stop the current mode before switching to avoid running multiple collectors.</p>
+<h2 id="en-section-9">4. Scheduled breaks</h2>
+<p>GUI breaks are based on cumulative active collection time:</p>
+<ul>
+<li>After one hour of collection, take a random 10–20-minute break.</li>
+<li>After four cumulative hours, take a random 45–101-minute break. The long break takes precedence; a short break is not added.</li>
+<li>Break time is excluded from active collection time.</li>
+</ul>
+<div class="table-wrap"><table><thead><tr><th>Launcher</th><th>Action</th></tr></thead><tbody>
+<tr><td><strong>30-Long-Rest-OFF.cmd</strong></td><td>Disable future four-hour scheduled long breaks</td></tr>
+<tr><td><strong>31-Long-Rest-ON.cmd</strong></td><td>Re-enable four-hour scheduled long breaks</td></tr>
+<tr><td><strong>32-Short-Rest-OFF.cmd</strong></td><td>Disable future hourly scheduled short breaks</td></tr>
+<tr><td><strong>33-Short-Rest-ON.cmd</strong></td><td>Re-enable hourly scheduled short breaks</td></tr>
+</tbody></table></div>
+<p>The settings are <code>scheduled_long_rest_enabled</code> and <code>scheduled_short_rest_enabled</code> in <code>&lt;root&gt;\GUI-ONLY\duty-cycle.json</code>. The controller reads them on its next run cycle; repeated restarts are unnecessary. Disabling a schedule does not end an already reserved break early, and re-enabling it does not reset cumulative runtime.</p>
+<p>The current configuration has no automatic cooldown every 40 minutes. The 40-minute figure in older material may refer to monitoring frequency.</p>
+<p>These switches control scheduled breaks only. Per-query waits, API backoff, server-directed waits, insufficient permissions or quota, and STOP/HOLD follow the original logic. Do not substitute the old <code>GUI-DUTY-OFF</code> command for these switches.</p>
+<h2 id="en-section-10">5. Data and checkpoints</h2>
+<p>Main database:</p>
+<pre><code data-syntax="text">&lt;root&gt;\nh-sales-v3\output\adaptive.sqlite3</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Table or directory</th><th>Contents</th></tr></thead><tbody>
+<tr><td><code>sales</code></td><td>Collected sales, retaining the original manufacturer, brand, model, category, year-month, city/province, and other fields</td></tr>
+<tr><td><code>tasks</code></td><td>Query scopes, parent/child tasks, status, completion types, and partition skips, including verified empty results</td></tr>
+<tr><td><code>attempts</code></td><td>Attempts, leases, and submission records used to determine whether a query can be retried after interruption</td></tr>
+<tr><td><code>evidence</code>, <code>row_sources</code></td><td>Screenshot-evidence indexes and row provenance</td></tr>
+<tr><td><code>output\v3\</code></td><td>Runtime state, heartbeats, and stop reasons</td></tr>
+<tr><td><code>output\evidence2\</code></td><td>Screenshot evidence</td></tr>
+<tr><td><code>GUI-ONLY\dutycycle\</code>, the kit&#x27;s <code>runtime\</code></td><td>Breaks, HOLD states, gates, and mutual-exclusion state</td></tr>
+<tr><td><code>output\api-collect\done.txt</code></td><td>Completion checkpoints generated by current API runs; scope, unfinished-task, and authentication records are in the same directory</td></tr>
+</tbody></table></div>
+<p>The database snapshot contains <strong>97,241 sales rows, 50,324 tasks, and 12,238 attempt records</strong>. There are 2,576 <code>verified_empty_scope*</code> tasks recording verified empty scopes; zeros are not inserted into the sales table. This is a saved local snapshot, not today&#x27;s combined totals from all VMs.</p>
+<p>The partition is <strong>P1 / [0,504]</strong>, ordered as <code>p1_cut_forward_circular_p2_p3_p4_p5</code>. The original GUI date range and exclusion of 2026 are retained. <code>partition_skipped</code> means another partition is responsible; it is not a missing task on this machine.</p>
+<p>Older API checkpoints are in <code>snapshots\api-unbound\</code> and <code>archives\API-checkpoints-unbound.zip</code>. They have not been bound to this machine and are inactive. Before importing them, check machine identity, model/manufacturer, months, city scope, and the database. Do not directly merge <code>done.txt</code> from different partitions.</p>
+<p>The database passes physical-integrity checks; historical foreign-key issues remain. Older versions may have false-empty, interrupted, or unfinished records. Packaging has not cleaned those checkpoints.</p>
+<p>The full SQL export is <code>sql\adaptive-full.sql.gz</code> and contains all tables. <code>DATA-SNAPSHOT.json</code> records counts and hashes; <code>SOURCES.json</code>, <code>SUPPLEMENTS.json</code>, and <code>EXTRA-HISTORICAL-FILES.json</code> record provenance. Missing historical screenshots and catalogs were supplied from an older migration package without overwriting the newer database or state.</p>
+<h2 id="en-section-11">6. Progress, stopping, and resuming</h2>
+<ul>
+<li><strong>20-Status.cmd</strong>: displays database counts, stop conditions, and waits. Look at recent queries, sales additions, and task changes—not just processes or heartbeats.</li>
+<li><strong>21-Stop-This-Project.cmd</strong>: stops this project while retaining data, checkpoints, and remaining waits. Collectors in other directories are unaffected.</li>
+<li><strong>22-Resume-Manual-Stop-Only.cmd</strong>: after manual confirmation, enter <code>RESUME</code> to release the marker written by this package&#x27;s manual Stop launcher. Then choose a mode separately. Platform HOLD states and other waits are not cleared with it.</li>
+</ul>
+<p>Log locations:</p>
+<pre><code data-syntax="text">API logs: &lt;root&gt;\nh-sales-v3\output\api-collect\run-*.log
+API probe: probe-events-*.jsonl and probe-state.json in the same directory
+GUI logs: kit\logs\, GUI-ONLY\logs\, GUI-ONLY\dutycycle\, output\v3\</code></pre>
+<p>The probe records the context of existing requests; it sends no extra test requests. Check timestamps in the latest log. A model or city in an old log is not necessarily the current task.</p>
+<h3 id="en-section-12">Common issues</h3>
+<div class="table-wrap"><table><thead><tr><th>Issue</th><th>Check first</th></tr></thead><tbody>
+<tr><td>Window or control not found</td><td>Display resolution, scaling, exact title, correct foreground mini program, and obstructions</td></tr>
+<tr><td><code>interactive_desktop_unavailable</code></td><td>Whether the computer or VM is locked, sleeping, or has lost its interactive desktop</td></tr>
+<tr><td>OCR failure or incomplete table</td><td>Existing screenshots and the current scope; avoid repeating the same submitted query</td></tr>
+<tr><td>Token not found or HTTP 401</td><td>WeChat login and the correct H5 session; a temporary URL code is not a permanent token, and an interface response still needs to validate a refreshed token</td></tr>
+<tr><td>Long wait after <code>SAVED</code></td><td>Abnormal backoff, retained waits, server-directed delays, or long cooldown in the log</td></tr>
+<tr><td>Query count exhausted or no permission</td><td>Confirm account permissions and quota manually before addressing the stop reason</td></tr>
+<tr><td>Damaged evidence</td><td>New evidence is written to evidence2; check the disk, because changing directories does not repair a damaged disk</td></tr>
+</tbody></table></div>
+<h2 id="en-section-13">7. Backup and migration</h2>
+<p>Stop collection before backing up:</p>
+<ul>
+<li>The complete <code>nh-sales-v3\output</code>, including the database, catalogs, evidence2, adaptive-attempts, v3, and api-collect.</li>
+<li>The kit&#x27;s <code>runtime</code> directory.</li>
+<li>GUI <code>dutycycle</code>.</li>
+<li>Current code and configuration.</li>
+</ul>
+<p>A writing SQLite database may also have <code>-wal</code> and <code>-shm</code> files; do not copy only the main database file. This package uses a checked static snapshot. If the current VM has newer data, export those files first rather than overwriting them with this snapshot.</p>
+<p>For migration, stop the old machine, install into an empty directory on the new machine, and resume the same partition. Do not copy one P1 checkpoint to two machines and run overlapping tasks simultaneously.</p>
+<p>SQL is for restoring into a new empty database or auditing data. Decompress <code>adaptive-full.sql.gz</code>, import it, and check all table counts and integrity. For normal use, keep <code>adaptive.sqlite3</code> directly. Restore results are in <code>SQL-RESTORE-VERIFICATION.json</code>.</p>
+<h2 id="en-section-14">8. Phone-project files</h2>
+<pre><code data-syntax="text">archives\NH-Honor-P1P2-D-20261001-Code-Patch.zip
+archives\NH-Honor-Click-Screenshot-Evidence-20261002.zip
+phone\latest-stopped-runtime\
+phone\CONTINUITY.json
+phone\PROGRESS.json</code></pre>
+<p>The phone workflow uses native phone screenshots, USB transfer to the computer, and computer-side OCR, retaining the 35-month plan and execution ledger. The latest batch attempt exited because a date-text receipt was missing; automated batch collection has not passed acceptance testing. State is <code>USER_STOPPED</code>; the two older monitors are paused.</p>
+<p>A single Bijie/Wenjie M9 query previously produced 15 reviewed rows in the phone&#x27;s separate <code>auto_sales</code> table; they were not merged into the desktop database. <strong>40-Phone-Package-Status.cmd</strong> displays archived state only and does not start phone collection.</p>
+<p>The evidence archive preserves native screenshots and program-input receipts for reviewing the operation sequence. Simulated touch is a program action; menu screenshots do not count as new sales queries.</p>
+<h2 id="en-section-15">9. Platform, networking, and query records</h2>
+<p>The platform is the “乘用车销量/NH乘用车销量库” mini program and related WeChat H5 pages. The saved API code uses maibasi.com business interfaces.</p>
+<p>The purchase terms you supplied include member queries by hand and screenshot sharing. Interface and automated batch-query quotas depend on the platform&#x27;s specific terms. Keep purchase information and customer-service responses with your records.</p>
+<p>Historical problems include HTTP 401, empty HTTP responses, permission/quota messages, network failures, and window-positioning, token-recovery, and OCR issues. Match logs, page messages, and account state at the same time. Slow responses alone do not establish anti-bot detection or poor server performance.</p>
+<p>The “3 ms/4 ms” field in the backend screenshot is <strong>processing duration</strong>, not request spacing. Use operation timestamps for the same account or the probe&#x27;s <code>start_interval_seconds</code> to check frequency.</p>
+<p>Different private VM IPs may share the same public egress address as the host; NAT commonly shares egress. Changing a nickname does not necessarily change a member or session identifier. Before network migration or troubleshooting, stop collection, retain checkpoints, and verify WeChat login and actual egress. The package does not rotate IPs or accounts automatically.</p>
+<p><code>HTTP_PROXY</code> and <code>HTTPS_PROXY</code> environment variables do not prove that a WeChat mini program uses the proxy. Phone USB debugging controls the phone and transfers images; phone routing and proxy settings determine the network used for business traffic.</p>
+<p>Random waits and backoff control frequency and reduce duplicate requests. There is no fixed “ban-proof interval.” Follow the logged stop or wait when permissions, quota, or rate limiting are explicit. There is no established fixed token lifetime or conclusion that several tokens can remain valid simultaneously.</p>
+<p>References: <a href="https://docs.scrapy.org/en/latest/topics/autothrottle.html" rel="noopener noreferrer">Scrapy throttling</a>, <a href="https://developer.android.com/tools/adb" rel="noopener noreferrer">Android ADB</a>.</p>
+<h2 id="en-section-16">10. Files and verification records</h2>
+<pre><code data-syntax="text">00-Set-Root.cmd                  Choose the installation root
+01-Install.cmd                   Install into an empty directory
+02-Check-Install-Environment.cmd  Check dependencies; download/install missing VC++
+03-Repair-VCpp.cmd                Repair VC++
+10-Start-Pure-GUI.cmd             Pure GUI
+11-Start-GUI-API.cmd              API first, sequential GUI handoff
+12-Start-Pure-API.cmd             Pure API
+20-Status.cmd                    Show status
+21-Stop-This-Project.cmd          Stop this project
+22-Resume-Manual-Stop-Only.cmd     Release this package&#x27;s manual Stop marker
+30/31-Long-Rest-OFF/ON.cmd        Long-break switches
+32/33-Short-Rest-OFF/ON.cmd       Short-break switches
+40-Phone-Package-Status.cmd       Show phone-project state
+90/91/92-Offline-Plan-*.cmd       View plans for the three modes offline
+payload/                        Code, Python, desktop database, and evidence
+sql/                            Full SQL export
+phone/                          Phone files at the time of stopping
+archives/                       Releases and evidence archives
+snapshots/api-unbound/           Older API checkpoints not yet bound to a machine</code></pre>
+<p>The integrated package passed offline entry-point, path-adaptation, dependency, and existing tests, as well as SQL restoration and data/evidence hash checks. It has not undergone a new live WeChat collection acceptance test. Prepare the environment using the check results before running it.</p>
+<p><code>VERIFICATION.txt</code> records tests and hashes; <code>ROLES.json</code> lists the original artifacts and subsequent supplements. Rollback restores only the specified package copy, not a production database or installed directory.</p>
+<p>The full package contains databases, screenshots, and diagnostics that may include account, member, and IP information. Use it for private backup and migration; inspect its contents before sharing it.</p></section></main></div>
+<footer data-ui-zh="仅切换说明语言，程序日志与运行配置不变。" data-ui-en="Language switching affects this guide only; application logs and runtime configuration are unchanged.">仅切换说明语言，程序日志与运行配置不变。</footer><script>
+(()=>{
+  'use strict';
+  const buttons=[...document.querySelectorAll('button[data-language]')];
+  function setLanguage(language){
+    const en=language==='en';
+    document.documentElement.lang=en?'en':'zh-Hans';
+    document.body.dataset.language=en?'en':'zh-CN';
+    document.title=document.body.dataset[en?'titleEn':'titleZh'];
+    document.querySelectorAll('[data-panel]').forEach(el=>{el.hidden=el.dataset.panel!==language;});
+    document.querySelectorAll('[data-ui-zh]').forEach(el=>{el.textContent=en?el.dataset.uiEn:el.dataset.uiZh;});
+    document.querySelectorAll('[data-href-zh]').forEach(el=>{el.href=en?el.dataset.hrefEn:el.dataset.hrefZh;});
+    buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===language)));
+  }
+  buttons.forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.language)));
+  setLanguage('zh-CN');
+})();
+</script></body></html>

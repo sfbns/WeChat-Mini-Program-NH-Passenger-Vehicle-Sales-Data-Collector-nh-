@@ -1,0 +1,40 @@
+{
+  "schema": "nh-public-assets/1",
+  "publication_date": "2026-10-09",
+  "sales_rows": 97241,
+  "task_rows": 50324,
+  "snapshot_months": [
+    "2017/01",
+    "2026/07"
+  ],
+  "not_a_complete_national_sales_census": true,
+  "original_local_assets_unchanged": true,
+  "historical_private_screenshots_withheld": true,
+  "files": [
+    {
+      "file": "data/NH-汽车销量-20261009.xlsx",
+      "bytes": 17519325,
+      "sha256": "9b8503efaa54ce2b2ed1bdb014aec3ff67de3ba22ecee19073deb6f6ce5e72e9"
+    },
+    {
+      "file": "data/NH-汽车销量-20261009.csv",
+      "bytes": 52493186,
+      "sha256": "0adba238835e94e7030a9f4c6aeec68c6b4886fcd125c8fbe6f9ec0989064d62"
+    },
+    {
+      "file": "images/汽车销量-局部截图.png",
+      "bytes": 139214,
+      "sha256": "42b0f4b9f496008f58cd72efca745d0574410492b312d8f30e3511d21b1dafc1"
+    },
+    {
+      "file": "packages/NH-Unified-All-Modes-Public-20261009.zip",
+      "bytes": 720327772,
+      "sha256": "73aeab601c2d83afdb20244dd504a83f5d5ce99bea552dbadc121954b68b0b83"
+    },
+    {
+      "file": "packages/NH-Honor-Phone-Code-Public-20261009.zip",
+      "bytes": 1307556,
+      "sha256": "26283ca15c318e044072dbf01bb971079c1bf2256ab4196b70823f903083d36a"
+    }
+  ]
+}
